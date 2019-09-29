@@ -4,7 +4,6 @@ const mongoose = require('mongoose');
 const url = 'mongodb://localhost/trafficsystem';
 const auth = require('./routes/auth');
 const data = require('./routes/data');
-const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 5000;
 mongoose.connect(
@@ -21,13 +20,22 @@ mongoose.connect(
 
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());
-app.use(cors);
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'GET POST PATCH DELETE');
+    return res.status(200).json({});
+  }
+  next();
+});
 
 app.use('/api/auth', auth);
 app.use('/api/data', data);
 
 app.use((req, res, next) => {
-  const error = new Error('Page Not Found');
+  const error = new Error('Routes Not Found');
   error.status = 404;
   next(error);
 });

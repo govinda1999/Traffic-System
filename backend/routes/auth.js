@@ -8,7 +8,6 @@ router.post('/register', (req, res) => {
     location: req.body.location
   });
   TrafficData.save()
-    .exec()
     .then(docs => {
       res.status(200).json({
         message: 'Traffic Signal Registered Succesfully'
@@ -32,6 +31,21 @@ router.get('/', (req, res) => {
     .catch(err => {
       res.status(500).json({
         message: 'Error'
+      });
+    });
+});
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
+  Traffic.remove({ _id: id })
+    .exec()
+    .then(docs => {
+      res.status(200).json({
+        message: 'Traffic Signal Removed Succesfully'
+      });
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: 'Traffic Signal Not Removed Succesfully'
       });
     });
 });
