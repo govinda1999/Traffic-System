@@ -64,10 +64,7 @@ router.get('/:id', (req, res) => {
     .limit(1)
     .sort({ date: -1 })
     .then(docs => {
-      res.status(200).json({
-        data: docs[0].data,
-        id: docs[0].traffic_id
-      });
+      res.status(200).json({data:docs[0].data,id:docs[0].traffic_id });
     })
     .catch(err => {
       res.status(500).json({
